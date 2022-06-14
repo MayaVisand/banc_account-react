@@ -1,25 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
+import '../src/App.css'
+import '../src/index.css'
+
+import Balance from "./components/Balance";
+import Operation from "./components/Operation";
+import {useState} from "react";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [balance, setBalance] = useState(0)
+    const deposit = sum =>
+    {
+        setBalance(prevBalance => prevBalance + sum)
+    }
+
+    const withdraw = sum =>
+    {
+        setBalance(prevBalance => (prevBalance - sum)<0 ? prevBalance: prevBalance - sum)
+    }
+
+    return (
+        <div>
+            <Balance balance={balance}/>
+            <Operation deposit={deposit} withdraw={withdraw}/>
+        </div>
+    );
 }
 
 export default App;
