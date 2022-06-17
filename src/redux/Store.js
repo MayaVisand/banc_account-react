@@ -1,27 +1,23 @@
-class Store
-{
-    constructor(reducer, initialState)
-    {
-        this._state = initialState
-        this._reducer = reducer
-        this._subscribers = []
+const createStore = (reducer, initialState) => {
+
+    let _state = initialState
+    let _reducer = reducer
+    let _subscribers = []
+
+    function getState() {
+        return _state
     }
 
-    get state()
-    {
-        return this._state
+    function dispatch(action) {
+        _state = _reducer(_state, action)
+        _subscribers.forEach(callback => callback())
     }
 
-    dispatch(action)
-    {
-        this._state = this._reducer(this._state, action)
-        this._subscribers.forEach(callback => callback())
+    function subscribe(callback) {
+        _subscribers.push(callback)
+        return () => _subscribers = _subscribers.filter(func => func !== callback)
     }
 
-    subscribe(callback)
-    {
-        this._subscribers.push(callback)
-        return () => this._subscribers = this._subscribers.filter(func => func!== callback)
-    }
+    return {getState, dispatch, subscribe}
 }
-export default Store
+export default createStore
